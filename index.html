@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EcoQuiz - Fazenda de Maçãs Rústica</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body id="game-body">
+<div id="intro-screen">
+  <div class="intro-card">
+<div style="font-size:80px;">
+  🍎👨‍🌾🍎
+</div>
+
+<h1 style="
+  color:#6d4c41;
+  font-size:3rem;
+  margin-bottom:10px;
+  text-shadow:2px 2px 0 #ffe082;
+">
+  Fazenda do Seu Zé
+</h1>
+
+<h2 style="
+  color:#2e7d32;
+  margin-top:0;
+">
+  Missão: Salvar a Colheita
+</h2>
+  <div style="
+  background:#fff8e1;
+  border:4px dashed #8d6e63;
+  border-radius:20px;
+  padding:20px;
+  margin:20px 0;
+">
+
+  <p>
+    O Seu Zé está preocupado...
+  </p>
+
+  <p>
+    Faz muitos dias que não chove e suas macieiras estão ficando secas.
+  </p>
+
+  <p>
+    Para trazer a chuva de volta, você precisará responder perguntas sobre água e meio ambiente.
+  </p>
+
+  <p>
+    Cada resposta certa ajuda a encher o reservatório da fazenda!
+  </p>
+
+</div>
+    <button onclick="iniciarJogo()">
+      🚜 VAMOS AJUDAR O SEU ZÉ!
+    </button>
+
+  </div>
+</div>
+<svg style="display: none;">
+  <defs>
+    <linearGradient id="leaf-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7bed9f" />
+      <stop offset="100%" stop-color="#2ed573" />
+    </linearGradient>
+    
+    <linearGradient id="cloud-base-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="70%" stop-color="#f1f2f6" />
+      <stop offset="100%" stop-color="#dfe4ea" />
+    </linearGradient>
+
+    <filter id="soft-blur">
+      <feGaussianBlur stdDeviation="2" />
+    </filter>
+
+    <g id="rust-apple">
+      <path d="M16,10 Q18,3 21,2" stroke="#4a2711" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M18,4 Q25,1 23,7 Q17,9 18,4 Z" fill="url(#leaf-grad)" stroke="#1e7e34" stroke-width="0.5"/>
+      <path d="M16,8 C23,6 29,9 29,17 C29,24 24,31 16,30 C8,31 3,24 3,17 C3,9 6,6 16,8 Z" fill="#ff0000" />
+      <ellipse cx="10" cy="14" rx="2" ry="4" fill="#ffffff" opacity="0.6" transform="rotate(-15, 10, 14)"/>
+    </g>
+
+    <g id="leaf-cluster" fill="#1b5e20" opacity="0.4">
+      <path d="M0,0 Q10,-10 20,0 Q10,10 0,0 Z" transform="rotate(15)"/>
+      <path d="M5,-5 Q15,-15 25,-5 Q15,5 5,-5 Z" transform="rotate(-20)"/>
+    </g>
+  </defs>
+</svg>
+
+<button id="theme-switcher" onclick="toggleView()">Ver Plantação</button>
+
+<div id="arrow-indicator">
+  ↑<br><span class="arrow-text">Clique aqui!</span>
+</div>
+
+<div id="nuvem-esq" class="nuvem-container">
+  <svg viewBox="0 0 300 150" width="100%" height="100%">
+    <path d="M 40,100 Q 70,60 110,65 Q 150,35 200,60 Q 250,55 270,95 Q 300,120 260,140 L 60,140 Q 20,130 40,100 Z" fill="url(#cloud-base-grad)" />
+  </svg>
+</div>
+
+<div id="nuvem-dir" class="nuvem-container">
+  <svg viewBox="0 0 300 150" width="100%" height="100%">
+    <path d="M 40,100 Q 70,60 110,65 Q 150,35 200,60 Q 250,55 270,95 Q 300,120 260,140 L 60,140 Q 20,130 40,100 Z" fill="url(#cloud-base-grad)" />
+  </svg>
+</div>
+<div id="sol">☀️</div>
+
+<div id="lab-view">
+  <svg class="farm-background" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMax slice">
+    <defs>
+      <linearGradient id="farm-hill-1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2ecc71"/><stop offset="100%" stop-color="#27ae60"/>
+      </linearGradient>
+      <linearGradient id="farm-hill-2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#26ae5f"/><stop offset="100%" stop-color="#1e7e43"/>
+      </linearGradient>
+      <linearGradient id="moinho-corpo" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#d63031"/><stop offset="70%" stop-color="#e17055"/><stop offset="100%" stop-color="#b2bec3"/>
+      </linearGradient>
+    </defs>
+    
+    <path d="M-100,500 Q200,300 500,420 T1100,380 L1100,500 Z" fill="url(#farm-hill-1)" opacity="0.8"/>
+    <path d="M-50,500 Q300,350 700,400 T1100,430 L1100,500 Z" fill="url(#farm-hill-2)"/>
+    
+    <g transform="translate(60, 220) scale(0.9)">
+      <polygon points="80,180 93,50 117,50 130,180" fill="url(#moinho-corpo)" stroke="#2d3436" stroke-width="1.5" />
+      <polygon points="90,50 105,15 120,50" fill="#2d3436" />
+      <rect x="100" y="145" width="10" height="20" rx="2" fill="#2d3436" />
+      <circle cx="105" cy="85" r="5" fill="#ffeaa7" stroke="#2d3436" />
+      <circle cx="105" cy="70" r="7" fill="#2d3436" />
+      <g class="moinho-helices">
+        <line x1="105" y1="70" x2="30" y2="30" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+        <polygon points="30,30 50,20 65,45" fill="#dfe6e9" opacity="0.9" />
+        <line x1="105" y1="70" x2="180" y2="110" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+        <polygon points="180,110 160,120 145,95" fill="#dfe6e9" opacity="0.9" />
+        <line x1="105" y1="70" x2="65" y2="145" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+        <polygon points="65,145 55,125 80,115" fill="#dfe6e9" opacity="0.9" />
+        <line x1="105" y1="70" x2="145" y2="-5" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+        <polygon points="145,-5 155,15 130,25" fill="#dfe6e9" opacity="0.9" />
+      </g>
+    </g>
+
+    <g fill="#744929" stroke="#54331c" stroke-width="2">
+      <rect x="0" y="450" width="1000" height="7" />
+      <rect x="0" y="465" width="1000" height="7" />
+      <polygon points="200,440 212,440 212,490 200,440" />
+      <polygon points="300,440 312,440 312,490 300,440" />
+      <polygon points="400,440 412,440 412,490 400,440" />
+      <polygon points="500,440 512,440 512,490 500,440" />
+    </g>
+  </svg>
+<div id="seu-ze-container">
+
+  <div id="dialogo-ze">
+    Eita! Minha plantação de maçã tá seca...
+  </div>
+
+<div id="ze-kid" style="
+  font-size:200px;
+  position:absolute;
+  left:20px;
+  bottom:-20px;
+">
+  👨‍🌾
+</div>
+</div>
+
+  <div id="quiz-card">
+    <h2>Fazenda do Seu Zé</h2>
+    <div id="question-num">Pergunta 1 de 20</div>
+    <p id="question" style="font-size: 1.3rem; margin: 20px 0;">Carregando pergunta...</p>
+    <div class="options-grid" id="options"></div>
+    <p id="status"></p>
+  </div>
+</div>
+
+<div id="forest-view">
+  <svg class="forest-background" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMax slice">
+    <defs>
+      <linearGradient id="organic-soil" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#64dd17"/><stop offset="30%" stop-color="#4bc311"/><stop offset="100%" stop-color="#1b5e20"/>
+      </linearGradient>
+      
+      <linearGradient id="mtn-layer-back" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#b9f6ca" />
+        <stop offset="100%" stop-color="#81c784" />
+      </linearGradient>
+      
+      <linearGradient id="mtn-layer-mid" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#9ccc65" />
+        <stop offset="100%" stop-color="#689f38" />
+      </linearGradient>
+
+      <linearGradient id="mtn-layer-front" x1="10%" y1="0%" x2="80%" y2="100%">
+        <stop offset="0%" stop-color="#7cb342" />
+        <stop offset="50%" stop-color="#558b2f" />
+        <stop offset="100%" stop-color="#33691e" />
+      </linearGradient>
+
+      <linearGradient id="bark-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#2d1305" />
+        <stop offset="25%" stop-color="#4a2311" />
+        <stop offset="60%" stop-color="#5c311a" />
+        <stop offset="85%" stop-color="#3d1b0a" />
+        <stop offset="100%" stop-color="#1f0a02" />
+      </linearGradient>
+      
+      <radialGradient id="leaves-organic-1" cx="45%" cy="35%" r="65%">
+        <stop offset="0%" stop-color="#388e3c" />
+        <stop offset="70%" stop-color="#2e7d32" />
+        <stop offset="100%" stop-color="#1b5e20" />
+      </radialGradient>
+    </defs>
+
+    <g>
+      <path d="M -100,460 C 50,220 120,200 250,260 S 450,140 600,240 C 750,160 850,180 1100,460 Z" fill="url(#mtn-layer-back)" opacity="0.6" filter="url(#soft-blur)" />
+      <path d="M -50,460 C 100,280 200,230 350,290 S 600,180 750,270 C 900,210 980,240 1100,460 Z" fill="url(#mtn-layer-mid)" opacity="0.85" />
+      <path d="M -100,460 C 80,320 220,280 400,340 S 700,220 880,310 C 980,290 1020,320 1150,460 Z" fill="url(#mtn-layer-front)" />
+    </g>
+
+    <path d="M -50,430 C 200,400 450,450 700,415 C 880,395 980,425 1050,430 L 1050,520 L -50,520 Z" fill="url(#organic-soil)"/>
+  </svg>
+
+  <div class="tree-container">
+    <div class="tree" id="tree1">
+      <svg class="fruit" style="top: 18%; left: 45%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="fruit" style="top: 24%; left: 32%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="fruit" style="top: 25%; left: 58%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="fruit" style="top: 34%; left: 24%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="fruit" style="top: 35%; left: 66%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="fruit" style="top: 38%; left: 46%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="tree-svg" viewBox="0 0 240 340">
+        <g>
+          <path d="M 85,340 C 90,260 95,190 95,150 C 75,130 50,105 45,95 L 58,88 C 65,98 85,115 100,130 C 102,100 110,80 135,65 L 145,75 C 125,90 118,110 115,145 C 120,190 130,260 145,340 Z" fill="url(#bark-gradient)"/>
+          <path d="M 105,330 Q 112,240 106,170" fill="none" stroke="#140702" stroke-width="3" stroke-linecap="round" opacity="0.7" />
+          <path d="M 125,310 Q 118,220 122,185" fill="none" stroke="#140702" stroke-width="2.5" stroke-linecap="round" opacity="0.6" />
+          <path d="M 93,290 Q 100,210 98,160" fill="none" stroke="#140702" stroke-width="2" stroke-linecap="round" opacity="0.5" />
+          <circle cx="108" cy="210" r="3" fill="#000" opacity="0.6"/>
+          <circle cx="120" cy="260" r="2.5" fill="#000" opacity="0.6"/>
+          <circle cx="102" cy="280" r="3.5" fill="#000" opacity="0.5"/>
+        </g>
+        <g filter="drop-shadow(0 5px 8px rgba(0,0,0,0.15))">
+          <path d="M 110,15 C 160,10 215,25 225,65 C 235,105 210,135 185,145 C 160,155 120,165 95,155 C 45,165 15,135 10,100 C 5,65 50,45 75,45 C 80,20 90,15 110,15 Z" fill="url(#leaves-organic-1)" />
+          <path d="M 100,30 C 140,25 185,40 190,75 C 195,110 155,125 120,115 C 80,125 45,105 50,75 C 55,45 80,35 100,30 Z" fill="#388e3c" opacity="0.5"/>
+          <use href="#leaf-cluster" x="40" y="60"/>
+          <use href="#leaf-cluster" x="160" y="50" transform="rotate(30, 160, 50)"/>
+          <use href="#leaf-cluster" x="120" y="80" transform="scale(1.2)"/>
+          <use href="#leaf-cluster" x="70" y="110" transform="rotate(-15, 70, 110)"/>
+          <use href="#leaf-cluster" x="170" y="100"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="tree" id="tree2">
+      <svg class="fruit" style="top: 16%; left: 46%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="fruit" style="top: 25%; left: 34%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="fruit" style="top: 24%; left: 60%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="fruit" style="top: 35%; left: 22%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="fruit" style="top: 34%; left: 48%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="fruit" style="top: 36%; left: 68%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="tree-svg" viewBox="0 0 240 340">
+        <g>
+          <path d="M 88,340 C 92,255 96,190 96,145 C 70,125 48,100 42,90 L 54,82 C 62,92 84,110 98,125 C 104,95 116,75 142,60 L 152,70 C 128,85 120,105 116,140 C 122,185 128,255 140,340 Z" fill="url(#bark-gradient)"/>
+          <path d="M 108,325 Q 114,235 109,165" fill="none" stroke="#140702" stroke-width="3" opacity="0.7" />
+          <path d="M 122,295 Q 116,215 120,180" fill="none" stroke="#140702" stroke-width="2" opacity="0.6" />
+          <circle cx="114" cy="230" r="3" fill="#000" opacity="0.6"/>
+          <circle cx="124" cy="195" r="2.5" fill="#000" opacity="0.5"/>
+        </g>
+        <g>
+          <path d="M 120,20 C 175,15 230,30 235,75 C 240,120 200,140 170,145 C 140,150 110,160 85,145 C 40,155 10,125 15,90 C 20,55 65,40 90,40 C 95,20 105,20 120,20 Z" fill="url(#leaves-organic-1)" />
+          <path d="M 110,35 C 150,30 190,45 195,80 C 200,115 150,120 120,110 C 90,120 60,105 65,75 C 70,45 90,40 110,35 Z" fill="#388e3c" opacity="0.4"/>
+          <use href="#leaf-cluster" x="50" y="70"/>
+          <use href="#leaf-cluster" x="180" y="65"/>
+          <use href="#leaf-cluster" x="110" y="90" transform="scale(1.1)"/>
+          <use href="#leaf-cluster" x="140" y="115"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="tree" id="tree3">
+      <svg class="fruit" style="top: 16%; left: 42%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="fruit" style="top: 24%; left: 28%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="fruit" style="top: 23%; left: 56%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="fruit" style="top: 34%; left: 20%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="fruit" style="top: 33%; left: 45%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="fruit" style="top: 36%; left: 65%;" viewBox="0 0 32 34"><use href="#rust-apple"/></svg>
+      <svg class="tree-svg" viewBox="0 0 240 340">
+        <g>
+          <path d="M 83,340 C 89,265 94,195 94,150 C 74,130 54,100 48,90 L 60,82 C 68,92 86,112 96,128 C 104,95 112,75 138,65 L 148,75 C 126,90 118,112 114,145 C 118,195 124,265 137,340 Z" fill="url(#bark-gradient)"/>
+          <path d="M 104,315 Q 110,245 106,175" fill="none" stroke="#140702" stroke-width="3" opacity="0.7" />
+          <path d="M 120,285 Q 114,225 116,190" fill="none" stroke="#140702" stroke-width="2" opacity="0.6" />
+          <circle cx="102" cy="245" r="2.5" fill="#000" opacity="0.6"/>
+          <circle cx="112" cy="275" r="3" fill="#000" opacity="0.5"/>
+        </g>
+        <g>
+          <path d="M 105,15 C 150,15 200,25 215,60 C 230,95 210,130 180,140 C 150,150 120,155 95,145 C 50,155 20,135 15,100 C 10,65 55,50 75,50 C 80,25 90,15 105,15 Z" fill="url(#leaves-organic-1)" />
+          <path d="M 100,30 C 135,25 175,35 180,65 C 185,95 150,115 120,105 C 90,115 60,105 65,75 C 70,50 85,40 100,30 Z" fill="#388e3c" opacity="0.4"/>
+          <use href="#leaf-cluster" x="65" y="60"/>
+          <use href="#leaf-cluster" x="150" y="55"/>
+          <use href="#leaf-cluster" x="100" y="80" transform="scale(1.2)"/>
+          <use href="#leaf-cluster" x="150" y="105"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <button id="action-button" onclick="handleAction()">FAZER CHOVER</button>
+</div>
+
+<div id="container-lateral">
+  <div id="porcentagem-vidro">Água<br>50%</div>
+  <div id="vidro"><div id="liquido"></div></div>
+</div>
+<div id="victory-message" class="end-message" style="
+  display:none;
+  border: 8px solid #8d6e63;
+  background: linear-gradient(to bottom, #fff8e1, #ffe082);
+">
+
+  <div style="font-size:80px;">🍎🧺🍎</div>
+
+  <h1 style="
+    color:#c62828;
+    margin-bottom:10px;
+    font-size:3rem;
+  ">
+    Colheita Concluída!
+  </h1>
+
+  <h2 style="
+    color:#6d4c41;
+    margin-top:0;
+  ">
+    Fazenda do Seu Zé
+  </h2>
+
+  <p style="
+    font-size:1.2rem;
+    color:#4e342e;
+    line-height:1.6;
+  ">
+    Graças ao seu conhecimento sobre a água,
+    a chuva chegou e salvou a plantação!
+  </p>
+
+  <p style="
+    font-size:1.3rem;
+    font-weight:bold;
+    color:#2e7d32;
+  ">
+    🌳 As macieiras cresceram<br>
+    🍎 Os frutos amadureceram<br>
+    🧺 E a colheita foi um sucesso!
+  </p>
+
+  <button
+    onclick="location.reload()"
+    style="
+      background:linear-gradient(135deg,#2e7d32,#43a047);
+      color:white;
+      padding:18px 40px;
+      border:none;
+      border-radius:40px;
+      cursor:pointer;
+      font-weight:bold;
+      font-size:1.2rem;
+      box-shadow:0 8px 20px rgba(0,0,0,.3);
+    "
+  >
+    🌱 Jogar Novamente
+  </button>
+
+</div>
+<div id="fail-message" class="end-message" style="
+display:none;
+border-top: 15px solid var(--warning);
+background-color:#fff3cd;
+">
+  <h1 style="color: var(--warning);">Quase lá!</h1>
+  <p>A plantação ainda precisa de mais água para florescer frutos vermelhos. Tente outra vez!</p>
+  <button style="background:var(--warning); color:white; padding:15px 30px; border:none; border-radius:10px; cursor:pointer; font-weight:bold; font-size:1.1rem;" onclick="location.reload()">RECOMEÇAR DESAFIO</button>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
